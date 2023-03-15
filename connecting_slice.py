@@ -31,19 +31,20 @@ class SimpleSwitch(app_manager.RyuApp):
         self.mac_to_port = {
         }
 
-        # out_port = slice_ports[in_port][slice_number]
-        self.slice_ports = {
-            1: {0: 0, 1: 0, 2: 2, 3: 3},
-            2: {0: 0, 1: 1, 2: 0, 3: 3},
-            3: {0: 0, 1: 1, 2: 2, 3: 0},
-            4: {0: 0, 1: 0, 2: 0, 3: 0},
-            5: {0: 0, 1: 0, 2: 0, 3: 0},
-            6: {0: 0, 1: 0, 2: 0, 3: 0}
-        }
-
         # out_port = slice_to_port[dpid][in_port]
         self.slice_to_port = {
-            12: {1: 2, 2: 1, 3: 0, 4: 0, 5: 0, 6: 0}
+            12: {1: 2, 2: 1, 3: 0, 4: 0}
+        }
+        self.slice_to_port1 = {
+            12: {1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 0}
+        }
+
+        self.slice_to_port2 = {
+            12: {1: 2, 2: 2, 3: 2, 4: 0, 5: 0, 6: 0}
+        }
+
+        self.slice_to_port3 = {            
+            12: {1: 3, 2: 3, 3: 3, 4: 0, 5: 0, 6: 0}
         }
 
     def add_flow(self, datapath, in_port, dst, src, actions, protocol):
@@ -97,21 +98,22 @@ class SimpleSwitch(app_manager.RyuApp):
         if (msg.in_port == 1 and dst in self.hostSlice1) or (msg.in_port == 2 and dst in self.hostSlice2) or (msg.in_port == 3 and dst in self.hostSlice3):
             return
 
-        if(dst in self.hostSlice1):
-            slice_number = 1
-        elif(dst in self.hostSlice2):
-            slice_number = 2
-        elif(dst in self.hostSlice3):
-            slice_number = 3
-        else:
-            slice_number = 0
-
         #filter the udp packets, sending them to the corresponding server
         if pkt.get_protocol(udp.udp) and msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
-            out_port=3 + msg.in_port #if arrives from slice1, send to server1 etc
+            out_port=3+msg.in_port #if arrives from slice1, send to server1 etc
             protocol=1      #udp
         else:
-            out_port = self.slice_ports[msg.in_port][slice_number]
+            #--------------------------------------------------------------------------------------------
+            if(dst in self.hostSlice1):
+                out_port = self.slice_to_port1[dpid][msg.in_port]
+            elif(dst in self.hostSlice2):
+                out_port = self.slice_to_port2[dpid][msg.in_port]
+            elif(dst in self.hostSlice3):
+                out_port = self.slice_to_port3[dpid][msg.in_port]
+            else:
+                out_port = self.slice_to_port[dpid][msg.in_port]
+            #--------------------------------------------------------------------------------------------
+
             if pkt.get_protocol(tcp.tcp):
                 protocol=2      #tcp
             else:
