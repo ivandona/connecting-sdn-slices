@@ -33,7 +33,7 @@ class SimpleSwitch(app_manager.RyuApp):
 
         # out_port = slice_to_port[dpid][in_port]
         self.slice_to_port = {
-            12: {1: 2, 2: 1, 3: 0, 4: 0}
+            12: {1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 0}
         }
         self.slice_to_port1 = {
             12: {1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 0}
