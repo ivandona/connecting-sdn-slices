@@ -50,7 +50,7 @@ class NetworkSlicingTopo(Topo):
         # Add switch links for slice 3
         self.addLink("s11", "s9", **slice3_link_config)
         self.addLink("s10", "s11", **slice3_link_config)
-        # Add switch links for s10 (switch that connects the three slices)
+        # Add switch links for s12 (switch that connects the three slices)
         self.addLink("s1", "s12", **connecting_slices_link_config)
         self.addLink("s6", "s12", **connecting_slices_link_config)
         self.addLink("s11", "s12", **connecting_slices_link_config)
@@ -67,7 +67,7 @@ class NetworkSlicingTopo(Topo):
         self.addLink("h9", "s9", **host_link_config)
         self.addLink("h10", "s10", **host_link_config)
 
-        #Add 2 server links
+        # Add 3 server links
         self.addLink("server1", "s12", **server_link_config)
         self.addLink("server2", "s12", **server_link_config)
         self.addLink("server3", "s12", **server_link_config)

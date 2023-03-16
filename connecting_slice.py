@@ -49,12 +49,14 @@ class SimpleSwitch(app_manager.RyuApp):
 
     def add_flow(self, datapath, in_port, dst, src, actions, protocol):
         ofproto = datapath.ofproto
-        if protocol ==1: #udp
-            proto=0x11
-        elif protocol ==2: #tcp
-            proto=0x06
+        if protocol == 1: #udp
+            proto = 0x11
+        elif protocol == 2: #tcp
+            proto = 0x06
         else: #icmp
-            proto=0x01
+            proto = 0x01
+
+
 
         match = datapath.ofproto_parser.OFPMatch(
             in_port=in_port,
@@ -92,7 +94,7 @@ class SimpleSwitch(app_manager.RyuApp):
 
         self.logger.info("LOG packet in %s %s %s %s", dpid, src, dst, msg.in_port)
 
-        out_port=0
+        out_port = 0
 
         #drop packet when the destination is not in the other slice
         if (msg.in_port == 1 and dst in self.hostSlice1) or (msg.in_port == 2 and dst in self.hostSlice2) or (msg.in_port == 3 and dst in self.hostSlice3):
@@ -100,24 +102,46 @@ class SimpleSwitch(app_manager.RyuApp):
 
         #filter the udp packets, sending them to the corresponding server
         if pkt.get_protocol(udp.udp) and msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
-            out_port=3+msg.in_port #if arrives from slice1, send to server1 etc
-            protocol=1      #udp
-        else:
-            #--------------------------------------------------------------------------------------------
-            if(dst in self.hostSlice1):
-                out_port = self.slice_to_port1[dpid][msg.in_port]
-            elif(dst in self.hostSlice2):
-                out_port = self.slice_to_port2[dpid][msg.in_port]
-            elif(dst in self.hostSlice3):
+            out_port = 3 + msg.in_port #if arrives from slice1, send to server1 etc
+            protocol = 1      #udp
+        elif pkt.get_protocol(tcp.tcp):
+            protocol = 2
+            # handles communication towards slice1
+            if dst in self.hostSlice1:
+                # slice2 has to use TCP port 3000, slice3 has to use TCP but can use any port
+                if (src in self.hostSlice2 and pkt.get_protocol(tcp.tcp).dst_port == 3000) or src in self.hostSlice3:
+                    out_port = self.slice_to_port1[dpid][msg.in_port]
+                # filter remaning packets, sending them to the corresponding server
+                # also making sure that packets aren't coming from servers
+                elif msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
+                    out_port = 3 + msg.in_port
+            # handles communication towards slice2
+            elif dst in self.hostSlice2:
+                #similar to first case
+                if (src in self.hostSlice1 and pkt.get_protocol(tcp.tcp).dst_port == 3000) or src in self.hostSlice3:
+                    out_port = self.slice_to_port2[dpid][msg.in_port]
+                elif msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
+                    out_port=3+msg.in_port
+            # handles communication towards slice3
+            elif dst in self.hostSlice3:
                 out_port = self.slice_to_port3[dpid][msg.in_port]
-            else:
-                out_port = self.slice_to_port[dpid][msg.in_port]
-            #--------------------------------------------------------------------------------------------
-
-            if pkt.get_protocol(tcp.tcp):
-                protocol=2      #tcp
-            else:
-                protocol=3      #icmp
+            elif msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
+                out_port = 3 + msg.in_port
+        elif pkt.get_protocol(icmp.icmp):
+            protocol = 3
+            if dst in self.hostSlice1:
+                out_port = self.slice_to_port1[dpid][msg.in_port]
+            elif dst in self.hostSlice2:
+                out_port = self.slice_to_port2[dpid][msg.in_port]
+            elif dst in self.hostSlice3:
+                out_port = self.slice_to_port3[dpid][msg.in_port]
+            # also making sure that packets aren't coming from server
+            elif msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6:
+                out_port = 3 + msg.in_port
+        # drop packets if protocol is not TCP, UDP or ICMP
+        else:
+            return
+           
         
 
         if out_port==0 or (not pkt.get_protocol(udp.udp) and (dst in self.servers)):
