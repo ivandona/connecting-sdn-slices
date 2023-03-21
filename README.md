@@ -2,7 +2,17 @@
 Networking 2 project
 
 ## Demo
-### Set
+### Setting up the network
+Start up and log into the VM:<br>
+```vagrant up comnetsemu```<br>
+```vagrant ssh comnetsemu```<br>
+
+Run the script to enable the RYU controllers to load the application:<br>
+```./runcontrollers.sh```<br>
+
+In an other terminal, start the network with mininet:<br>
+```$ sudo python3 network.py```<br>
+
 pingall
 
 ### Intra-slice communication (Hosts in the same slice)
