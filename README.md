@@ -34,6 +34,7 @@ Host 1 can send UDP packets to Host 5<br>
 mininet> h5 iperf -s -u &
 mininet> h1 iperf -c 10.0.0.5 -u -t 10 -i 1
 ```
+![same_slice_udp](images/same_slice_udp.jpeg)
 
 ### Inter-slice communication (Hosts in different slices)
 Host 2 (slice 1) can send TCP packets to Host 3 (slice 2) on port 3000:<br>
@@ -41,12 +42,14 @@ Host 2 (slice 1) can send TCP packets to Host 3 (slice 2) on port 3000:<br>
 mininet> h3 iperf -s -p 3000 &
 mininet> h2 iperf -c 10.0.0.3 -p 3000 -t 10 -i 1
 ```
+![slice1_slice2_tcp_port3000](images/slice1_slice2_tcp_port3000.jpeg)
 
 Host 1 (slice 1) can send TCP packets to Host 10 (slice 3) regardless of the port chosen:<br>
 ```bash
 mininet> h10 iperf -s &
 mininet> h1 iperf -c 10.0.0.10 -t 10 -i 1
 ```
+![slice1_slice3_tcp](images/slice1_slice3_tcp.jpeg)
 
 Host 4 (slice 2) cannot send TCP packets to Host 6 (slice 1) on a different port:<br>
 ```bash
@@ -59,6 +62,7 @@ Host 2 (slice 1) cannot send UDP packets to Host 7 (slice 2):<br>
 mininet> h7 iperf -s -u &
 mininet> h2 iperf -c 10.0.0.7 -u -t 10 -i 1
 ```
+![diff_slice_udp](images/diff_slice_udp.jpeg)
 
 Flow table for switch 12 (connecting slice):<br>
 ```bash
