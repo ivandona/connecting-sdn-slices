@@ -55,7 +55,7 @@ mininet> h6 iperf -c 10.0.0.4 -p 4000 -t 10 -i 1
 
 Host 2 (slice 1) cannot send UDP packets to Host 7 (slice 2):<br>
 ```bash
-mininet> h7 iperf -s -u &```<br>
+mininet> h7 iperf -s -u &
 mininet> h2 iperf -c 10.0.0.7 -u -t 10 -i 1
 ```
 
