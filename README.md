@@ -25,3 +25,7 @@ Host 4 (slice 2) cannot send TCP packets to Host 10 (slice 3) on a different por
 Host 2 (slice 1) cannot send UDP packets to Host 7 (slice 2):<br>
 ```h7 iperf -s -u```<br>
 ```h2 iperf -c 10.0.0.7 -u -t 10 -i 1```<br>
+
+Flow table for switch 12 (connecting slice):<br>
+```$ sudo ovs-ofctl dump-flows s12```<br>
+
