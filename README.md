@@ -27,6 +27,7 @@ Host 8 can send TCP packets to Host 3:<br>
 mininet> h3 iperf -s &
 mininet> h8 iperf -c 10.0.0.3 -t 10 -i 1
 ```
+![same_slice_tcp](images/same_slice_tcp.jpeg)
 
 Host 1 can send UDP packets to Host 5<br>
 ```bash
