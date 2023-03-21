@@ -8,9 +8,6 @@ from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet
 from ryu.lib.packet import ether_types
 
-# *********************************************************
-# Uffcio2
-# *********************************************************
 
 class SimpleSwitch(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_0.OFP_VERSION]
@@ -67,7 +64,7 @@ class SimpleSwitch(app_manager.RyuApp):
 
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
-        self.logger.info("LOG packet in %s %s %s %s", dpid, src, dst, msg.in_port)
+        #self.logger.info("LOG packet in %s %s %s %s", dpid, src, dst, msg.in_port)
 
         # learn a mac address to avoid FLOOD next time.
         self.mac_to_port[dpid][src] = msg.in_port
