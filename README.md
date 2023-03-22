@@ -64,7 +64,7 @@ Host 4 (slice 2) cannot send TCP packets to Host 6 (slice 1) on a different port
 mininet> h4 iperf -s -p 4000 &
 mininet> h6 iperf -c 10.0.0.4 -p 4000 -t 10 -i 1
 ```
-![slice1_slice2_tcp_diff_port](images/slice1_slice2_tcp_diff_port)
+![slice1_slice2_tcp_diff_port](images/slice1_slice2_tcp_diff_port.jpeg)
 
 Host 2 (slice 1) cannot send UDP packets to Host 7 (slice 2):<br>
 ```bash
