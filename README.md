@@ -1,9 +1,20 @@
 # connecting-sdn-slices
-Networking 2 project
+*Softwarized and virtualized network*'s project
 
 Members:<br>
 - Davide Battaglia
 - Ivan Donà
+
+## Network Topology
+![network_topology](images/network_topology.jpeg)
+
+The network is divided into three slices: **office1** (slice1), **office2** (slice2), **admin** (slice3). Communication between slices is implemented using a fourth slice (**connecting_slice**).
+
+**office1** and **office2** can send to each other only TCP packets on port 3000. UDP packets and TCP packets on a different port are sent to the servers in the connecting slice.
+
+Communication from/towards **admin** is also via TCP packets, but any port can be used. UDP packets are sent to the servers in the connecting slice.
+
+The **connecting slice** acts as a filter, redirecting packets that do not respect the policies mentioned before. Packets from office1 are sent to server1, office2 to server2 and admin server3.
 
 ## Demo
 ### Setting up the network
