@@ -19,7 +19,11 @@ In an other terminal, start the network with mininet:<br>
 $ sudo python3 network.py
 ```
 
-pingall
+### Testing reachability
+```bash
+mininet> pingall
+```
+![pingall](images/pingall.jpeg)
 
 ### Intra-slice communication (Hosts in the same slice)
 Host 8 can send TCP packets to Host 3:<br>
