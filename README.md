@@ -1,4 +1,4 @@
-# connecting-sdn-slices
+# Connecting SDN Slices
 *Softwarized and virtualized network*'s project
 
 Members:<br>
