@@ -117,7 +117,7 @@ class SimpleSwitch(app_manager.RyuApp):
             # handles communication towards slice1
             if (dst in self.hostSlice1):
                 # slice2 has to use TCP port 3000, slice3 has to use TCP but can use any port
-                if ((src in self.hostSlice2 and pkt.get_protocol(tcp.tcp).dst_port==3000) or src in self.hostSlice3):
+                if ((src in self.hostSlice2 and (pkt.get_protocol(tcp.tcp).dst_port==3000 or pkt.get_protocol(tcp.tcp).src_port==3000)) or src in self.hostSlice3):
                     out_port = self.slice_to_port1[dpid][msg.in_port]
                 # filter remaning packets, sending them to the corresponding server
                 # also making sure that packets aren't coming from servers
@@ -126,7 +126,7 @@ class SimpleSwitch(app_manager.RyuApp):
             # handles communication towards slice2
             elif (dst in self.hostSlice2):
                 #similar to first case
-                if ((src in self.hostSlice1 and pkt.get_protocol(tcp.tcp).dst_port==3000) or src in self.hostSlice3):
+                if ((src in self.hostSlice1 and (pkt.get_protocol(tcp.tcp).dst_port==3000 or pkt.get_protocol(tcp.tcp).src_port==3000)) or src in self.hostSlice3):
                     out_port = self.slice_to_port2[dpid][msg.in_port]
                 elif (msg.in_port != 4 and msg.in_port != 5 and msg.in_port != 6):
                     out_port=3+msg.in_port
