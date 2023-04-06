@@ -14,6 +14,8 @@ The network is divided into three slices: **office1** (slice1), **office2** (sli
 
 Communication from/towards **admin** is also via TCP packets, but any port can be used. UDP packets are sent to the servers in the connecting slice.
 
+ICMP are always let through.
+
 The **connecting slice** acts as a filter, redirecting packets that do not respect the policies mentioned before. Packets from office1 are sent to server1, office2 to server2 and admin server3.
 
 ## Demo
