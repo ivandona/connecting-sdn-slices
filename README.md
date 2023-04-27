@@ -16,7 +16,7 @@ Communication from/towards **admin** is also via TCP packets, but any port can b
 
 ICMP are always let through.
 
-The **connecting slice** acts as a filter, redirecting packets that do not respect the policies mentioned before. Packets from office1 are sent to server1, office2 to server2 and admin server3.
+The **connecting slice** acts as a filter, redirecting packets that do not respect the policies mentioned before. Packets from office1 are sent to server1, office2 to server2 and admin to server3.
 
 ## Demo
 ### Setting up the network
